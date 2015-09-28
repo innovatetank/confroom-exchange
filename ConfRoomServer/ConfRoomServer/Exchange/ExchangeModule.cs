@@ -20,6 +20,7 @@ namespace ConfRoomServer.Exchange
         {
             Get["/exchange/hello"] = GetHello();
             Get["/exchange/test"] = GetTest();
+            Get["/exchange/mailbox"] = GetMailbox();
         }
 
         // GET: /exchange/hello
@@ -49,6 +50,19 @@ namespace ConfRoomServer.Exchange
                 return Response.AsJson(response);
             };
         }
-        
+
+        // GET: /exchange/mailbox?mailbox=emailaddress@domain.com
+        private Func<dynamic, dynamic> GetMailbox()
+        {
+            return p =>
+            {
+                var request = new GetMailboxInfo.GetMailboxInfoRequest(
+                    email: Request.Query.mailbox);
+                var response = new GetMailboxInfo().Execute(request);
+
+                return Response.AsJson(response);
+            };
+        }
+
     } //end of class
 }

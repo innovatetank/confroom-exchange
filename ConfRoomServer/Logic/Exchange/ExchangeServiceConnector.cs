@@ -10,13 +10,21 @@ namespace ConfRoomServer.Logic.Exchange
 {
     public class ExchangeServiceConnector
     {
+        public static string DomainName {
+            get
+            {
+                var domain = Environment.GetEnvironmentVariable("CONFROOMSERVER_DOMAIN");
+                return domain;
+            }
+        }
+
         public static ExchangeService GetService()
         {
             var uri = GetExchangeUri();
 
             var userName = Environment.GetEnvironmentVariable("CONFROOMSERVER_USER");
             var password = Environment.GetEnvironmentVariable("CONFROOMSERVER_PASSWORD");
-            var domain = Environment.GetEnvironmentVariable("CONFROOMSERVER_DOMAIN");
+            var domain = DomainName;
 
             var service = new ExchangeService();
             service.Url = new Uri(uri);

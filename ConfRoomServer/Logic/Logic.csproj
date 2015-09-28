@@ -40,6 +40,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,6 +52,7 @@
     <Compile Include="BaseResponse.cs" />
     <Compile Include="Exchange\ExchangeServiceConnector.cs" />
     <Compile Include="Exchange\GetCalendarItems.cs" />
+    <Compile Include="Exchange\GetMailboxInfo.cs" />
     <Compile Include="Exchange\Models\AppointmentItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
