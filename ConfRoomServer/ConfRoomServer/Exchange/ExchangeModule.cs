@@ -41,8 +41,10 @@ namespace ConfRoomServer.Exchange
         {
             return p =>
             {
-                var request = new GetTestCalendarItems.GetTestCalendarItemsRequest(Request.Query.mailbox);
-                var response = new GetTestCalendarItems().Execute(request);
+                var request = new GetCalendarItems.GetCalendarItemsRequest(
+                    mailboxEmail: Request.Query.mailbox,
+                    daysToLoad: 1);
+                var response = new GetCalendarItems().Execute(request);
 
                 return Response.AsJson(response);
             };

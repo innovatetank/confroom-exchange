@@ -7,36 +7,38 @@ using System.Threading.Tasks;
 
 namespace ConfRoomServer.Logic.Exchange
 {
-    public class GetTestCalendarItems
+    public class GetCalendarItems
     {
         [Serializable]
-        public class GetTestCalendarItemsRequest : BaseRequest
+        public class GetCalendarItemsRequest : BaseRequest
         {
             public string MailboxEmail { get; set; }
+            public int DaysToLoad { get; set; }
 
-            public GetTestCalendarItemsRequest(string mailboxEmail)
+            public GetCalendarItemsRequest(string mailboxEmail, int daysToLoad)
             {
                 MailboxEmail = mailboxEmail;
+                DaysToLoad = daysToLoad;
             }
         }
 
         [Serializable]
-        public class GetTestCalendarItemsResponse : BaseResponse
+        public class GetCalendarItemsResponse : BaseResponse
         {
             public DateTime StartDate { get; set; }
             public DateTime EndDate { get; set; }
             public List<Models.AppointmentItem> Appointments { get; set; }
         }
 
-        public GetTestCalendarItemsResponse Execute(GetTestCalendarItemsRequest request)
+        public GetCalendarItemsResponse Execute(GetCalendarItemsRequest request)
         {
-            var response = new GetTestCalendarItemsResponse();
+            var response = new GetCalendarItemsResponse();
 
             var service = ExchangeServiceConnector.GetService();
 
             // Initialize values for the start and end times, and the number of appointments to retrieve.
             DateTime startDate = DateTime.Today;
-            DateTime endDate = startDate.AddDays(1);
+            DateTime endDate = startDate.AddDays(request.DaysToLoad);
             const int NUM_APPTS = 20;
 
             var mbx = new Mailbox(request.MailboxEmail);
