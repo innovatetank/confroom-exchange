@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ConfRoomServer.Logic.Exchange;
 
 namespace ConfRoomServer.Exchange
 {
@@ -17,19 +18,33 @@ namespace ConfRoomServer.Exchange
 
         private void registerRoutes()
         {
+            Get["/exchange/hello"] = GetHello();
             Get["/exchange/test"] = GetTest();
         }
 
+        // GET: /exchange/hello
+        private Func<dynamic, dynamic> GetHello()
+        {
+            return p =>
+            {
+                var hi = new
+                {
+                    Message = "Hello World!"
+                };
+
+                return Response.AsJson(hi);
+            };
+        }
+
+        // GET: /exchange/test?mailbox=emailaddress@domain.com
         private Func<dynamic, dynamic> GetTest()
         {
             return p =>
             {
-                var testObject = new
-                {
-                    TestProperty = "Hello World!!!"
-                };
+                var request = new GetTestCalendarItems.GetTestCalendarItemsRequest(Request.Query.mailbox);
+                var response = new GetTestCalendarItems().Execute(request);
 
-                return Response.AsJson(testObject);
+                return Response.AsJson(response);
             };
         }
         
