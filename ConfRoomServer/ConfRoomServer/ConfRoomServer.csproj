@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\ConfigModule.cs" />
     <Compile Include="ConfRoomServerService.cs">
       <SubType>Component</SubType>
     </Compile>
