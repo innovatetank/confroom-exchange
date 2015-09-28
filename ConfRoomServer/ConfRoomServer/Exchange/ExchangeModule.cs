@@ -26,7 +26,7 @@ namespace ConfRoomServer.Exchange
             {
                 var testObject = new
                 {
-                    TestProperty = "Hello World"
+                    TestProperty = "Hello World!!!"
                 };
 
                 return Response.AsJson(testObject);
