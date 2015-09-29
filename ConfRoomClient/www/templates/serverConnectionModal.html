@@ -10,15 +10,15 @@
       <div class="list">
         <label class="item item-input">
           <span class="input-label">Conference Room Email</span>
-          <input type="text" ng-model="loginData.email">
+          <input type="email" ng-model="serverConnectionData.email">
         </label>
         <label class="item item-input">
           <span class="input-label">Server Name</span>
-          <input type="password" ng-model="loginData.host">
+          <input type="text" ng-model="serverConnectionData.host">
         </label>
         <label class="item item-input">
           <span class="input-label">Server Port</span>
-          <input type="text" ng-model="loginData.port">
+          <input type="number" ng-model="serverConnectionData.port">
         </label>
         <label class="item">
           <button class="button button-block button-positive" type="submit">Save</button>

@@ -4,10 +4,15 @@ angular.module('confRoomClientApp.controllers', [])
   $scope.roomName = "[LOADING]";
 
   $scope.appointmentsLoaded = false;
-  var email = 'Chicago.Room@usa-truck.com';
+  
+  var email = window.localStorage['confroom_email'];
+  var host = window.localStorage['confroom_host'];
+  var port = window.localStorage['confroom_port'];
+
   $scope.companyLogoUrl = "";
   $scope.asOf = null;
   $scope.roomColor = {"background-color":'#ccc'};
+  $scope.roomAvailable = false;
 
   $scope.loadMailboxInfo = function () {
     $log.info('Getting mailbox info');
@@ -37,15 +42,20 @@ angular.module('confRoomClientApp.controllers', [])
 
   $scope.loadConfiguration = function () {
     $log.info('Getting configuration');
-    ApiService.configGetConfig(email, function (response) {
-      $scope.configSettings = response.configSettings;
-      $scope.companyLogoUrl = response.configSettings.companyLogoUrl;    
+    if (email && host && port) {
+      ApiService.configGetConfig(email, function (response) {
+        $scope.configSettings = response.configSettings;
+        $scope.companyLogoUrl = response.configSettings.companyLogoUrl;    
 
-      $scope.loadExchangeItems();
-        setInterval(function () {
-          $scope.loadExchangeItems();
-        }, $scope.configSettings.pollingIntervalSeconds * 1000);
-    });
+        $scope.loadExchangeItems();
+          setInterval(function () {
+            $scope.loadExchangeItems();
+          }, $scope.configSettings.pollingIntervalSeconds * 1000);
+      });      
+    }
+    else {
+      $scope.roomName = "[PLEASE CONFIGURE SERVER NAME]";
+    }
   };
 
   $scope.getRoomColorStyle = function () {
@@ -60,13 +70,16 @@ angular.module('confRoomClientApp.controllers', [])
     var now = new Date();
     for (var i = 0; i < $scope.appointments.length; i++) {
       var a = $scope.appointments[i];
+      a.isCurrentAppointment = false;
 
       if (a.startDate <= now && a.endDate > now) {
         available = false;
+        a.isCurrentAppointment = true;
         break;
       }
     }
 
+    $scope.roomAvailable = available;
     if (available) {
       $scope.roomColor = {"background-color":$scope.configSettings.availableColor}; 
     } else {
@@ -139,37 +152,40 @@ angular.module('confRoomClientApp.controllers', [])
   //$scope.$on('$ionicView.enter', function(e) {
   //});
 
-  // Form data for the login modal
-  $scope.loginData = {};
+  // Form data for the Server Connection modal
+  $scope.serverConnectionData = {
+    email: window.localStorage['confroom_email'],
+    host: window.localStorage['confroom_host'],
+    port: parseInt(window.localStorage['confroom_port']) || 8977
+  };
 
-  // Create the login modal that we will use later
+  $scope.closeServerConnectionModal = function() {
+    $scope.serverConnectionModal.hide();
+  };
+
+  $scope.openServerConnectionModal = function() {
+    $scope.serverConnectionModal.show();
+  };
+  
+  $scope.saveServerConnectionData = function() {
+    var data = $scope.serverConnectionData;
+    console.log('Saving', data);
+    
+    window.localStorage['confroom_email'] = data.email;
+    window.localStorage['confroom_host'] = data.host;
+    window.localStorage['confroom_port'] = data.port;
+
+    $scope.closeServerConnectionModal();
+    location.reload();
+  };
+
+  // Create the Server Connection modal that we will use later
   $ionicModal.fromTemplateUrl('templates/serverConnectionModal.html', {
     scope: $scope
   }).then(function(modal) {
-    $scope.modal = modal;
+    $scope.serverConnectionModal = modal;
   });
 
-
-  // Triggered in the login modal to close it
-  $scope.closeServerConnectionModal = function() {
-    $scope.modal.hide();
-  };
-
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
-
-  // Perform the login action when the user submits the login form
-  $scope.saveServerConnectionData = function() {
-    console.log('Doing login', $scope.loginData);
-
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeServerConnectionModal();
-    }, 1000);
-  };
 });
 
 

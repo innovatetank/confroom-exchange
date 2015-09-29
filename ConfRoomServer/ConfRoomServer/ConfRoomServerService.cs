@@ -25,7 +25,7 @@ namespace ConfRoomServer
         {
             var uri = ConfigurationManager.AppSettings["listenerUri"].ToString();
 
-            host = new NancyHost(new Uri(uri));
+            host = new NancyHost(new CustomBootstrapper(), new Uri(uri));
             host.Start();
         }
 

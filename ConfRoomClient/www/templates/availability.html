@@ -16,9 +16,18 @@
   	  <div style="position:absolute;top:100px;left:0;z-index:1;width:100%;color:white;text-align:center">
 	  	  <h3 style="color:#222">CURRENT APPOINTMENTS<span ng-show="asOf"> as of {{ getTimeString(asOf) }}</span></h3>
 
-	  	  <div ng-hide="appointmentsLoaded">loading</div>
-	  	  <div ng-show="appointmentsLoaded" ng-repeat="appointment in appointments">
-	  	  	<b>{{appointment.subject}}</b> - {{appointment.startTime}} - {{appointment.endTime}}
+	  	  <div style="margin-top:30px">
+		  	  <div ng-hide="appointmentsLoaded">loading</div>
+		  	  <div ng-show="appointmentsLoaded" ng-repeat="appointment in appointments">	  	  	
+		  	  	<h3 style="color:white">
+			  	  	<span ng-show="appointment.isCurrentAppointment">&rarr;</span>
+			  	  	<b>{{appointment.subject}}</b> - {{appointment.startTime}} - {{appointment.endTime}}
+			  	  	<span ng-show="appointment.isCurrentAppointment">&larr;</span>
+		  	  	</h3>
+		  	  </div>
+		  	  <div ng-show="appointmentsLoaded && appointments.length == 0">
+		  	  	<h3 style="color:white">NONE FOR TODAY</h3>
+		  	  </div>
 	  	  </div>
   	  </div> 
   	  
@@ -29,7 +38,7 @@
   	  </div>
   </ion-content>
 
-  <div style="position:absolute; bottom:50px;left:0;right:0;z-index:3" ng-show="appointmentsLoaded">			
+  <div style="position:absolute; bottom:50px;left:0;right:0;z-index:3" ng-show="appointmentsLoaded && roomAvailable">			
 	  	  	<div style="text-align:center;">
 	  	  		<button class="button" ng-click="bookRoomButton()" style="height:60px"><span style="font-size:32px">Use This Room Now</span></button>	  	  		
 	  	  	</div>
