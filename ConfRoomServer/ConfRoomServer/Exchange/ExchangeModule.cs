@@ -19,7 +19,7 @@ namespace ConfRoomServer.Exchange
         private void registerRoutes()
         {
             Get["/exchange/hello"] = GetHello();
-            Get["/exchange/test"] = GetTest();
+            Get["/exchange/items"] = GetItems();
             Get["/exchange/mailbox"] = GetMailbox();
         }
 
@@ -37,8 +37,8 @@ namespace ConfRoomServer.Exchange
             };
         }
 
-        // GET: /exchange/test?mailbox=emailaddress@domain.com
-        private Func<dynamic, dynamic> GetTest()
+        // GET: /exchange/items?mailbox=emailaddress@domain.com
+        private Func<dynamic, dynamic> GetItems()
         {
             return p =>
             {

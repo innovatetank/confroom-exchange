@@ -1,6 +1,6 @@
 <ion-modal-view style="height:350px">
   <ion-header-bar class="bar-dark">
-    <h1 class="title">Book Room</h1>
+    <h1 class="title">Book Room Now</h1>
     <div class="buttons">
       <button class="button button-clear" ng-click="closeBookRoom()">Close</button>
     </div>
@@ -12,20 +12,21 @@
             <div style="width:350px;height:100%;display:inline-block">
               <div class="row" style="height:210px">
                 
-                <div style="width:20%;background-color:green;color:white;position:relative" ng-click="clickMinus()">
+                <div style="width:20%;background-color:green;color:white;position:relative;cursor:pointer" ng-click="clickMinus()">
                   <div style="display:inline-block;position:absolute;left:50%;top:50%;margin-left:-12px;margin-top:-12px">
                     <span style="font-size:72px">-</span>
                   </div>
                 </div>
                 
                 <div style="width:60%;background-color:white;position:relative">                  
-                  <div style="width:120px;color:#222;display:inline-block;position:absolute;top:50%;left:50%;margin-left:-60px;margin-top:-20px">
+                  <div style="width:120px;color:#222;display:inline-block;position:absolute;top:50%;left:50%;margin-left:-60px;margin-top:-50px">
+                    <span style="font-size:10px">for</span><br/><br/>
                     <span style="font-size:72px">{{bookMinutes}}</span><br/>
                     <span style="font-size:24px">MINUTES</span>
                   </div>
                 </div>
                 
-                <div style="width:20%;background-color:green;color:white;position:relative" ng-click="clickPlus()">
+                <div style="width:20%;background-color:green;color:white;position:relative;cursor:pointer" ng-click="clickPlus()">
                   <div style="display:inline-block;position:absolute;left:50%;top:50%;margin-left:-23px;margin-top:-12px">
                     <span style="font-size:72px">+</span>
                   </div>
