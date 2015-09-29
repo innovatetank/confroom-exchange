@@ -51,13 +51,13 @@ namespace ConfRoomServer.Exchange
             };
         }
 
-        // GET: /exchange/mailbox?mailbox=emailaddress@domain.com
+        // GET: /exchange/mailbox?email=emailaddress@domain.com
         private Func<dynamic, dynamic> GetMailbox()
         {
             return p =>
             {
                 var request = new GetMailboxInfo.GetMailboxInfoRequest(
-                    email: Request.Query.mailbox);
+                    email: Request.Query.email);
                 var response = new GetMailboxInfo().Execute(request);
 
                 return Response.AsJson(response);

@@ -53,8 +53,21 @@ angular.module('confRoomClientApp.services', [])
         };
 
         service.exchangeMailboxInfo = function (email, callback) {
-            // GET: /exchange/test?mailbox=emailaddress@domain.com
-            return service.get('exchange/mailbox?mailbox=' + email, callback);
+            // GET: /exchange/test?email=emailaddress@domain.com
+            return service.get('exchange/mailbox?email=' + email, callback);
+        };
+
+        service.configGetConfig = function (email, callback) {
+            // GET: /config?email=mailboxemail@domain.com
+            return service.get('config?email=' + email, callback);
+        };
+
+        service.exchangeBook = function (email, minutes, callback) {
+            var request = {
+                email: email,
+                minutes: minutes
+            };
+            return service.post('exchange/book', request, callback);
         };
 
         return service;

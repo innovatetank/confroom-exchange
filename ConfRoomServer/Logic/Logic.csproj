@@ -50,6 +50,8 @@
   <ItemGroup>
     <Compile Include="BaseRequest.cs" />
     <Compile Include="BaseResponse.cs" />
+    <Compile Include="Config\GetConfig.cs" />
+    <Compile Include="Config\Models\ConfigSettings.cs" />
     <Compile Include="Exchange\ExchangeServiceConnector.cs" />
     <Compile Include="Exchange\GetCalendarItems.cs" />
     <Compile Include="Exchange\GetMailboxInfo.cs" />

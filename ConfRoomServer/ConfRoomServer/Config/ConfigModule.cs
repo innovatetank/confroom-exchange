@@ -1,4 +1,5 @@
-﻿using Nancy;
+﻿using ConfRoomServer.Logic.Config;
+using Nancy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace ConfRoomServer.Config
 {
     public class ConfigModule : NancyModule
     {
+        
         public ConfigModule()
             : base()
         {
@@ -20,15 +22,17 @@ namespace ConfRoomServer.Config
             Get["/config"] = GetConfig();
         }
 
+        // GET: /config?email=mailboxemail@domain.com
         private Func<dynamic, dynamic> GetConfig()
         {
             return p =>
             {
-                var config = new {
-                    AvailableColor = "green",
-                    BusyColor = "red"
+                var request = new GetConfig.GetConfigRequest
+                {
+                    Email = Request.Query.email
                 };
-                return Response.AsJson(config);
+                var response = new GetConfig().Execute(request);
+                return Response.AsJson(response);
             };
         }
 

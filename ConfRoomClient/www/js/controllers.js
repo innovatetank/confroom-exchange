@@ -1,9 +1,11 @@
 angular.module('confRoomClientApp.controllers', [])
 
-.controller('AvailabilityCtrl', function ($scope, $log, ApiService) {
+.controller('AvailabilityCtrl', function ($scope, $log, $ionicModal, ApiService) {
   $scope.roomName = "[LOADING]";
 
+  $scope.appointmentsLoaded = false;
   var email = 'Chicago.Room@usa-truck.com';
+  $scope.companyLogoUrl = "";
 
   $log.info('Getting mailbox info');
   ApiService.exchangeMailboxInfo(email, function (response) {
@@ -26,6 +28,11 @@ angular.module('confRoomClientApp.controllers', [])
       return h + ":" + m + ampm;
   };
 
+  $log.info('Getting configuration');
+  ApiService.configGetConfig(email, function (response) {
+    $scope.companyLogoUrl = response.configSettings.companyLogoUrl;
+  });
+
   $log.info('Getting exchange test data.');
   ApiService.exchangeTest(email, function (response) {
       $log.info('callback');
@@ -36,12 +43,42 @@ angular.module('confRoomClientApp.controllers', [])
         a.startTime = getTimeString(new Date(a.start));
         a.endTime = getTimeString(new Date(a.end));        
       }
-      
+
       $scope.appointments = response.appointments;
+      $scope.appointmentsLoaded = true;
   });
 
 
+  $ionicModal.fromTemplateUrl('templates/bookRoomModal.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.bookRoomModal = modal;
+  });
 
+  $scope.bookRoomButton = function () {
+      $scope.bookMinutes = 15;
+      $scope.bookRoomModal.show();
+  };
+  $scope.closeBookRoom = function () {
+      $scope.bookRoomModal.hide();
+  }
+
+  $scope.clickPlus = function () {
+    if ($scope.bookMinutes < 120) {
+      $scope.bookMinutes += 15;  
+    }    
+  }
+
+  $scope.clickMinus = function () {
+    if ($scope.bookMinutes > 15) {
+      $scope.bookMinutes -= 15;  
+    }    
+  }
+
+  $scope.bookItButton = function () {
+    $log.info("BOOK IT for " + $scope.bookMinutes + " MINUTES");
+    $scope.bookRoomModal.hide();
+  };
 })
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
@@ -57,11 +94,12 @@ angular.module('confRoomClientApp.controllers', [])
   $scope.loginData = {};
 
   // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/exchangeSettingsModal.html', {
+  $ionicModal.fromTemplateUrl('templates/serverConnectionModal.html', {
     scope: $scope
   }).then(function(modal) {
     $scope.modal = modal;
   });
+
 
   // Triggered in the login modal to close it
   $scope.closeLogin = function() {
@@ -83,18 +121,6 @@ angular.module('confRoomClientApp.controllers', [])
       $scope.closeLogin();
     }, 1000);
   };
-})
-
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
-})
-
-.controller('PlaylistCtrl', function($scope, $stateParams) {
 });
+
+

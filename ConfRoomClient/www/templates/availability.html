@@ -1,27 +1,37 @@
 <ion-view>
-  <ion-content style="background-color:green;">
+  <ion-content style="background-color:green">
+
+  	  <div style="position:absolute; top:0;left:0;z-index:-1">
+			<div class="companyLogo">
+				<img ng-src="{{companyLogoUrl}}" style="width:90px;height:90px;margin-left:5px;margin-top:5px">
+			</div>
+  	  </div>
+
+  	  <div style="position:absolute; top:30px;left:0;right:0;z-index:0">			
+	  	  	<div style="text-align:center">
+	  	  		<h1 style="color:white">{{roomName}}</h1>			
+	  	  	</div>
+  	  </div>
+
+  	  <div style="position:absolute;top:100px;left:0;z-index:1;width:100%;color:white;text-align:center">
+	  	  <h3 style="color:#222">CURRENT APPOINTMENTS</h3>
+
+	  	  <div ng-hide="appointmentsLoaded">loading</div>
+	  	  <div ng-show="appointmentsLoaded" ng-repeat="appointment in appointments">
+	  	  	<b>{{appointment.subject}}</b> - {{appointment.startTime}} - {{appointment.endTime}}
+	  	  </div>
+  	  </div> 
   	  
-  	  <div style="position:absolute; top:0;right:0;z-index:1">
+  	  <div style="position:absolute; top:0;right:0;z-index:2">
 			<button class="button button-icon button-clear ion-navicon" style="font-size:32px"
 					menu-toggle="right">
         	</button>
   	  </div>
-
-  	  <div style="position:absolute;top:0;left:0;z-index:0;width:100%;color:white;text-align:center">
-	  	  <div style="text-align:center; margin-top:30px">
-	  	  	<h1 style="color:white">{{roomName}}</h1>
-	  	  </div>
-
-	  	  <h4 style="margin-top:30px">CURRENT APPOINTMENTS</h4>
-
-	  	  <div ng-repeat="appointment in appointments">
-	  	  	<b>{{appointment.subject}}</b> - {{appointment.startTime}} - {{appointment.endTime}}
-	  	  </div>
-
-	  	  <div style="margin-top:100px">
-	  	  		<button class="button">Book This Room</button>
-	  	  </div>
-  	  </div>
-  	  
   </ion-content>
+
+  <div style="position:absolute; bottom:50px;left:0;right:0;z-index:3">			
+	  	  	<div style="text-align:center;">
+	  	  		<button class="button" ng-click="bookRoomButton()">Use This Room Now</button>	  	  		
+	  	  	</div>
+  	  </div>
 </ion-view>

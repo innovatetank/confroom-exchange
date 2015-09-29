@@ -1,0 +1,45 @@
+<ion-modal-view style="height:350px">
+  <ion-header-bar class="bar-dark">
+    <h1 class="title">Book Room</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeBookRoom()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content style="background-color:blue">
+    <form>      
+      <div class="list" style="min-height:100%;height:100%;background-color:#444">        
+        <div class="item" style="min-height:100%;height:100%;width:100%;text-align:center">
+            <div style="width:350px;height:100%;display:inline-block">
+              <div class="row" style="height:210px">
+                
+                <div style="width:20%;background-color:green;color:white;position:relative" ng-click="clickMinus()">
+                  <div style="display:inline-block;position:absolute;left:50%;top:50%;margin-left:-12px;margin-top:-12px">
+                    <span style="font-size:72px">-</span>
+                  </div>
+                </div>
+                
+                <div style="width:60%;background-color:white;position:relative">                  
+                  <div style="width:120px;color:#222;display:inline-block;position:absolute;top:50%;left:50%;margin-left:-60px;margin-top:-20px">
+                    <span style="font-size:72px">{{bookMinutes}}</span><br/>
+                    <span style="font-size:24px">MINUTES</span>
+                  </div>
+                </div>
+                
+                <div style="width:20%;background-color:green;color:white;position:relative" ng-click="clickPlus()">
+                  <div style="display:inline-block;position:absolute;left:50%;top:50%;margin-left:-23px;margin-top:-12px">
+                    <span style="font-size:72px">+</span>
+                  </div>
+                </div>
+              
+              </div>
+            </div>
+        </div>
+      </div>
+    </form>
+  </ion-content>
+  <ion-footer-bar style="height:65px">
+    <div style="width:100%;padding-bottom:10px">    
+          <button class="button button-block button-positive" type="button" ng-click="bookItButton()">Book It</button>  
+    </div>
+  </ion-footer-bar>
+</ion-modal-view>
