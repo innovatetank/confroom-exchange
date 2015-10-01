@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,23 +35,39 @@ namespace ConfRoomServer.Logic.Config
             return Convert.ToInt32(ConfigurationManager.AppSettings["pollingIntervalSeconds"].ToString());
         }
 
+
+
         public GetConfigResponse Execute(GetConfigRequest request)
         {
             var response = new GetConfigResponse();
 
-            var companyLogoUrl = getCompanyLogoUrl();
             int pollingIntervalSeconds = getPollingIntervalSeconds();
-            
+            var companyLogoImage = getCompanyLogoImage();
+
             var configSettings = new Models.ConfigSettings
             {
                 AvailableColor = "green",
                 BusyColor = "red",
-                CompanyLogoUrl = companyLogoUrl,
+                CompanyLogoImage = companyLogoImage,
                 PollingIntervalSeconds = pollingIntervalSeconds
             };
             response.ConfigSettings = configSettings;
+            response.Success = true;
 
             return response;
+        }
+
+        private string getCompanyLogoImage()
+        {
+            var companyLogoUrl = getCompanyLogoUrl();
+
+            using (var client = new WebClient())
+            {
+                client.UseDefaultCredentials = true;
+
+                var byteArray = client.DownloadData(companyLogoUrl);
+                return "data:image/png;base64," + Convert.ToBase64String(byteArray);
+            }
         }
 
     }

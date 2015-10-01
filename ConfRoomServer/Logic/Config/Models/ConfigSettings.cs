@@ -11,7 +11,8 @@ namespace ConfRoomServer.Logic.Config.Models
     {
         public string AvailableColor { get; set; }
         public string BusyColor { get; set; }
-        public string CompanyLogoUrl { get; set; }
+        //public string CompanyLogoUrl { get; set; }
+        public string CompanyLogoImage { get; set; }
         public int PollingIntervalSeconds { get; set; }
     }
 }
