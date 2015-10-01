@@ -1,4 +1,4 @@
-angular.module('confRoomClientApp', ['ionic', 'confRoomClientApp.controllers', 'confRoomClientApp.services'])
+angular.module('confRoomClientApp', ['ionic', 'ngCordova', 'confRoomClientApp.controllers', 'confRoomClientApp.services'])
 
 .run(function($ionicPlatform, $log, ApiService) {
     $ionicPlatform.ready(function() {
@@ -8,11 +8,6 @@ angular.module('confRoomClientApp', ['ionic', 'confRoomClientApp.controllers', '
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
             cordova.plugins.Keyboard.disableScroll(true);
         }
-        if(window.StatusBar) {
-            StatusBar.hide(); //styleDefault();
-        }
-        
-        //$cordovaStatusbar.hide();
     });
 })
 
