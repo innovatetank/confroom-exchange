@@ -9,7 +9,8 @@ angular.module('confRoomClientApp.controllers', [])
   var host = window.localStorage['confroom_host'];
   var port = window.localStorage['confroom_port'];
 
-  $scope.companyLogoUrl = "";
+  //$scope.companyLogoUrl = "";
+  $scope.companyLogoImage = "";
   $scope.asOf = null;
   $scope.roomColor = {"background-color":'#ccc'};
   $scope.roomAvailable = false;
@@ -44,9 +45,8 @@ angular.module('confRoomClientApp.controllers', [])
     $log.info('Getting configuration');
     if (email && host && port) {
       ApiService.configGetConfig(email, function (response) {
-        $scope.configSettings = response.configSettings;
-        $scope.companyLogoUrl = response.configSettings.companyLogoUrl;    
-
+        $scope.configSettings = response.configSettings;        
+        $scope.companyLogoImage = response.configSettings.companyLogoImage;
         $scope.loadExchangeItems();
           setInterval(function () {
             $scope.loadExchangeItems();

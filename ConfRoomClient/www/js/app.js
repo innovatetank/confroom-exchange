@@ -9,11 +9,10 @@ angular.module('confRoomClientApp', ['ionic', 'confRoomClientApp.controllers', '
             cordova.plugins.Keyboard.disableScroll(true);
         }
         if(window.StatusBar) {
-            StatusBar.styleDefault();
+            StatusBar.hide(); //styleDefault();
         }
-
         
-
+        //$cordovaStatusbar.hide();
     });
 })
 
