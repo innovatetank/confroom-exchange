@@ -66,8 +66,8 @@ angular.module('confRoomClientApp.services', [])
 
         service.exchangeBook = function (email, minutes, callback) {
             var request = {
-                email: email,
-                minutes: minutes
+                mailboxEmail: email,
+                bookMinutes: minutes
             };
             return service.post('exchange/book', request, callback);
         };

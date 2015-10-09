@@ -1,6 +1,6 @@
 angular.module('confRoomClientApp.controllers', [])
 
-.controller('AvailabilityCtrl', function ($scope, $log, $ionicModal, ApiService) {
+.controller('AvailabilityCtrl', function ($scope, $log, $ionicModal, $ionicPopup, $ionicLoading, ApiService) {
     $scope.roomName = "[LOADING]";
 
     $scope.appointmentsLoaded = false;
@@ -149,7 +149,21 @@ angular.module('confRoomClientApp.controllers', [])
 
     $scope.bookItButton = function () {
         $log.info("BOOK IT for " + $scope.bookMinutes + " MINUTES");
+        
+        $ionicLoading.show({ template: '<h1>Saving...</h1>' });
         $scope.bookRoomModal.hide();
+        
+        ApiService.exchangeBook(email, $scope.bookMinutes, function (response) {
+            if (response && response.success) {
+                location.reload();    
+            } else {
+                $ionicLoading.hide();
+                $ionicPopup.alert({
+                    title: 'Error',
+                    template: response.errorMessage
+                });
+            }
+        });
     };
 
     $ionicModal.fromTemplateUrl('templates/bookRoomModal.html', {
