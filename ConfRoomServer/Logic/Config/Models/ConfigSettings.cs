@@ -11,8 +11,12 @@ namespace ConfRoomServer.Logic.Config.Models
     {
         public string AvailableColor { get; set; }
         public string BusyColor { get; set; }
-        //public string CompanyLogoUrl { get; set; }
+        
+        /// <summary>
+        /// Company logo is base64 encoded as PNG
+        /// </summary>
         public string CompanyLogoImage { get; set; }
+
         public int PollingIntervalSeconds { get; set; }
     }
 }

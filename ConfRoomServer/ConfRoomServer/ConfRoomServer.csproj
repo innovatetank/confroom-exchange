@@ -59,6 +59,7 @@
       <DependentUpon>ConfRoomServerService.cs</DependentUpon>
     </Compile>
     <Compile Include="CustomBoostrapper.cs" />
+    <Compile Include="Exchange\Dtos\ReserveRoomRequestDto.cs" />
     <Compile Include="Exchange\ExchangeModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">

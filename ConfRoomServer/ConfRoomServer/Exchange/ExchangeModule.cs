@@ -1,4 +1,5 @@
 ﻿using Nancy;
+using Nancy.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace ConfRoomServer.Exchange
             Get["/exchange/hello"] = GetHello();
             Get["/exchange/items"] = GetItems();
             Get["/exchange/mailbox"] = GetMailbox();
+            Post["/exchange/book"] = PostBook();
         }
 
         // GET: /exchange/hello
@@ -59,6 +61,21 @@ namespace ConfRoomServer.Exchange
                 var request = new GetMailboxInfo.GetMailboxInfoRequest(
                     email: Request.Query.email);
                 var response = new GetMailboxInfo().Execute(request);
+
+                return Response.AsJson(response);
+            };
+        }
+
+        // POST: /exchange/book
+        private Func<dynamic, dynamic> PostBook()
+        {
+            return p =>
+            {
+                var dto = this.Bind<Dtos.ReserveRoomRequestDto>();
+                var request = new ReserveRoom.ReserveRoomRequest(
+                    mailboxEmail: dto.MailboxEmail,
+                    bookMinutes: dto.BookMinutes);
+                var response = new ReserveRoom().Execute(request);
 
                 return Response.AsJson(response);
             };

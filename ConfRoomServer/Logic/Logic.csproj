@@ -56,6 +56,7 @@
     <Compile Include="Exchange\GetCalendarItems.cs" />
     <Compile Include="Exchange\GetMailboxInfo.cs" />
     <Compile Include="Exchange\Models\AppointmentItem.cs" />
+    <Compile Include="Exchange\ReserveRoom.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

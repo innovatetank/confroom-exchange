@@ -34,51 +34,61 @@ namespace ConfRoomServer.Logic.Exchange
         {
             var response = new GetCalendarItemsResponse();
 
-            var service = ExchangeServiceConnector.GetService();
-
-            // Initialize values for the start and end times, and the number of appointments to retrieve.
-            DateTime startDate = DateTime.Today;
-            DateTime endDate = startDate.AddDays(request.DaysToLoad);
-            const int NUM_APPTS = 20;
-
-            var mbx = new Mailbox(request.MailboxEmail);
-            
-
-            FolderId fid = new FolderId(WellKnownFolderName.Calendar, mbx);
-
-            // Initialize the calendar folder object with only the folder ID. 
-            //CalendarFolder calendar = CalendarFolder.Bind(service, WellKnownFolderName.Calendar, new PropertySet());
-            CalendarFolder calendar = CalendarFolder.Bind(service, fid, new PropertySet(FolderSchema.ManagedFolderInformation, FolderSchema.ParentFolderId, FolderSchema.ExtendedProperties));
-
-            // Set the start and end time and number of appointments to retrieve.
-            CalendarView cView = new CalendarView(startDate, endDate, NUM_APPTS);
-
-            // Limit the properties returned to the appointment's subject, start time, and end time.
-            cView.PropertySet = new PropertySet(AppointmentSchema.Subject, AppointmentSchema.Start, AppointmentSchema.End);
-
-            // Retrieve a collection of appointments by using the calendar view.
-            FindItemsResults<Appointment> appointments = calendar.FindAppointments(cView);
-            
-            var items = new List<Models.AppointmentItem>();
-            foreach (var a in appointments)
-            {
-                //find appointments will only give basic properties.
-                //in order to get more properties (such as BODY), we need to call call EWS again
-                //Appointment appointmentDetailed = Appointment.Bind(service, a.Id, new PropertySet(BasePropertySet.FirstClassProperties) { RequestedBodyType = BodyType.Text });
-
+            try {
+                var service = ExchangeServiceConnector.GetService(request.MailboxEmail);
                 
-                items.Add(new Models.AppointmentItem
-                {
-                    Start = a.Start,
-                    End = a.End,
-                    Subject = a.Subject
-                });
-            }
+                //service.ImpersonatedUserId = new ImpersonatedUserId(ConnectingIdType.SmtpAddress, request.MailboxEmail);
+                service.HttpHeaders.Add("X-AnchorMailbox", request.MailboxEmail);
 
-            response.StartDate = startDate;
-            response.EndDate = endDate;
-            response.Appointments = items;
-            response.Success = true; 
+                // Initialize values for the start and end times, and the number of appointments to retrieve.
+                DateTime startDate = DateTime.Today;
+                DateTime endDate = startDate.AddDays(request.DaysToLoad);
+                const int NUM_APPTS = 20;
+
+                var mbx = new Mailbox(request.MailboxEmail);
+                FolderId fid = new FolderId(WellKnownFolderName.Calendar, mbx);
+                //FolderId fid = new FolderId(WellKnownFolderName.Calendar, request.MailboxEmail);
+                //FolderId fid = new FolderId(WellKnownFolderName.Calendar);
+
+                // Initialize the calendar folder object with only the folder ID. 
+                //CalendarFolder calendar = CalendarFolder.Bind(service, WellKnownFolderName.Calendar, new PropertySet());
+                CalendarFolder calendar = CalendarFolder.Bind(service, fid, new PropertySet(FolderSchema.ManagedFolderInformation, FolderSchema.ParentFolderId, FolderSchema.ExtendedProperties));
+                //CalendarFolder calendar = CalendarFolder.Bind(service, WellKnownFolderName.Calendar, new PropertySet(FolderSchema.ManagedFolderInformation, FolderSchema.ParentFolderId, FolderSchema.ExtendedProperties));
+                
+                // Set the start and end time and number of appointments to retrieve.
+                CalendarView cView = new CalendarView(startDate, endDate, NUM_APPTS);
+
+                // Limit the properties returned to the appointment's subject, start time, and end time.
+                cView.PropertySet = new PropertySet(AppointmentSchema.Subject, AppointmentSchema.Start, AppointmentSchema.End);
+
+                // Retrieve a collection of appointments by using the calendar view.
+                FindItemsResults<Appointment> appointments = calendar.FindAppointments(cView);
+
+                var items = new List<Models.AppointmentItem>();
+                foreach (var a in appointments)
+                {
+                    //find appointments will only give basic properties.
+                    //in order to get more properties (such as BODY), we need to call call EWS again
+                    //Appointment appointmentDetailed = Appointment.Bind(service, a.Id, new PropertySet(BasePropertySet.FirstClassProperties) { RequestedBodyType = BodyType.Text });
+
+
+                    items.Add(new Models.AppointmentItem
+                    {
+                        Start = a.Start,
+                        End = a.End,
+                        Subject = a.Subject
+                    });
+                }
+
+                response.StartDate = startDate;
+                response.EndDate = endDate;
+                response.Appointments = items;
+                response.Success = true; 
+            }
+            catch (Exception e)
+            {
+                response.ErrorMessage = e.ToString();
+            }
 
             return response;
         }

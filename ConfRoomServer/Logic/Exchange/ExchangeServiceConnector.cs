@@ -18,35 +18,37 @@ namespace ConfRoomServer.Logic.Exchange
             }
         }
 
-        public static ExchangeService GetService()
+        public static ExchangeService GetService(string emailAddress)
         {
-            var uri = GetExchangeUri();
+            //var uri = GetExchangeUri();
 
             var userName = Environment.GetEnvironmentVariable("CONFROOMSERVER_USER");
             var password = Environment.GetEnvironmentVariable("CONFROOMSERVER_PASSWORD");
             var domain = DomainName;
 
             var service = new ExchangeService();
-            service.Url = new Uri(uri);
+            //service.Url = new Uri(uri);
+            service.AutodiscoverUrl(emailAddress);
             service.Credentials = new WebCredentials(userName, password, domain);
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) => true);
             return service;
         }
 
-        public static string GetExchangeUri()
-        {
-            string uri = "";
-            var uriAppConfig = ConfigurationManager.AppSettings["exchangeUri"].ToString();
-            var uriEnv = Environment.GetEnvironmentVariable("CONFROOMSERVER_EXCHANGEURI");
-            if (!string.IsNullOrWhiteSpace(uriEnv))
-            {
-                uri = uriEnv;
-            }
-            else
-            {
-                uri = uriAppConfig;
-            }
+        //public static string GetExchangeUri()
+        //{
+        //    string uri = "";
+        //    var uriAppConfig = ConfigurationManager.AppSettings["exchangeUri"].ToString();
+        //    var uriEnv = Environment.GetEnvironmentVariable("CONFROOMSERVER_EXCHANGEURI");
+        //    if (!string.IsNullOrWhiteSpace(uriEnv))
+        //    {
+        //        uri = uriEnv;
+        //    }
+        //    else
+        //    {
+        //        uri = uriAppConfig;
+        //    }
 
-            return uri;
-        }
+        //    return uri;
+        //}
     }
 }
