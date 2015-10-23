@@ -4,6 +4,9 @@ angular.module('confRoomClientApp.controllers', [])
     $scope.roomName = "[LOADING]";
 
     $scope.appointmentsLoaded = false;
+    
+    // If the room is currently available, then we show the next appointment booked for the room. 
+    $scope.nextAppointment = null;
 
     var email = window.localStorage['confroom_email'];
     var host = window.localStorage['confroom_host'];
@@ -16,6 +19,7 @@ angular.module('confRoomClientApp.controllers', [])
         "background-color": '#ccc'
     };
     $scope.roomAvailable = false;
+    $scope.availableText = "AVAILABLE";
 
     $scope.loadMailboxInfo = function () {
         $log.info('Getting mailbox info');
@@ -42,6 +46,18 @@ angular.module('confRoomClientApp.controllers', [])
             return h + ":" + m + ampm;
         }
     };
+    $scope.getDateString = function (dt) {
+        if (dt) {
+            var monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+
+            var m = dt.getMonth();
+            var d = dt.getDay();
+            var y = dt.getFullYear();
+
+            return monthNames[m] + " " + d + ", " + y;
+        }
+    };
 
     $scope.loadConfiguration = function () {
         $log.info('Getting configuration');
@@ -49,6 +65,8 @@ angular.module('confRoomClientApp.controllers', [])
             ApiService.configGetConfig(email, function (response) {
                 $scope.configSettings = response.configSettings;
                 $scope.companyLogoImage = response.configSettings.companyLogoImage;
+                $scope.availableRoomText = response.configSettings.availableRoomText;
+                $scope.busyRoomText = response.configSettings.busyRoomText;
                 $scope.loadExchangeItems();
                 setInterval(function () {
                     $scope.loadExchangeItems();
@@ -67,28 +85,48 @@ angular.module('confRoomClientApp.controllers', [])
         if (!$scope.appointmentsLoaded) return;
         $log.info('setRoomColorBasedOnAppointments');
 
+        // Is the room available and what is the current appointment?
         var available = true;
         var now = new Date();
         for (var i = 0; i < $scope.appointments.length; i++) {
             var a = $scope.appointments[i];
+            
+            // Is this appointment in progress?
             a.isCurrentAppointment = false;
-
             if (a.startDate <= now && a.endDate > now) {
                 available = false;
                 a.isCurrentAppointment = true;
-                break;
-            }
+            }            
         }
-
+        
+        // Calculate the next appointment time 
+        if (available) {
+            for (var i = 0; i < $scope.appointments.length; i++) {
+                var a = $scope.appointments[i];
+                
+                if (!a.isCurrentAppointment) {
+                    if (a.startDate > now && ($scope.nextAppointment == null || a.startDate < $scope.nextAppointment.startDate)) {
+                        $scope.nextAppointment = a;                        
+                    }
+                }
+            }
+        } else {
+            // Room is busy
+            $scope.nextAppointment = null;
+        }
+        
+        // Set classes on scope for room availability color
         $scope.roomAvailable = available;
         if (available) {
             $scope.roomColor = {
                 "background-color": $scope.configSettings.availableColor
             };
+            $scope.availableText = $scope.availableRoomText;
         } else {
             $scope.roomColor = {
                 "background-color": $scope.configSettings.busyColor
             };
+            $scope.availableText = $scope.busyRoomText;
         }
     };
 
@@ -100,7 +138,6 @@ angular.module('confRoomClientApp.controllers', [])
         } else {
             console.log("NOT hiding status bar");
         }
-
 
         $log.info('Getting exchange items.');
         ApiService.exchangeItems(email, function (response) {
@@ -126,7 +163,7 @@ angular.module('confRoomClientApp.controllers', [])
     $scope.allowBookRoom = function () {
         return $scope.appointmentsLoaded && $scope.roomAvailable;
     };
-    
+
     $scope.bookRoomButton = function () {
         $scope.bookMinutes = 15;
         $scope.bookRoomModal.show();
@@ -149,13 +186,15 @@ angular.module('confRoomClientApp.controllers', [])
 
     $scope.bookItButton = function () {
         $log.info("BOOK IT for " + $scope.bookMinutes + " MINUTES");
-        
-        $ionicLoading.show({ template: '<h1>Saving...</h1>' });
+
+        $ionicLoading.show({
+            template: '<h1>Saving...</h1>'
+        });
         $scope.bookRoomModal.hide();
-        
+
         ApiService.exchangeBook(email, $scope.bookMinutes, function (response) {
             if (response && response.success) {
-                location.reload();    
+                location.reload();
             } else {
                 $ionicLoading.hide();
                 $ionicPopup.alert({

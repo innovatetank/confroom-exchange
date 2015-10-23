@@ -1,3 +1,9 @@
+/*
 .companyLogo {
 	min-width:100px;min-height:100px;width:100px;height:100px;background-color:white;margin-left:15px;margin-top:15px;
+}
+*/
+
+.highlightCurrentAppointment {
+    background-color: #61afe1;
 }

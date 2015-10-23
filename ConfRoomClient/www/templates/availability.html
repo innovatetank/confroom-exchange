@@ -1,46 +1,178 @@
 <ion-view>
-  <ion-content ng-style="getRoomColorStyle()">
+    <ion-content ng-style="getRoomColorStyle()" scroll="false">
 
-  	  <div style="position:absolute; top:0;left:0;z-index:-1">
-			<div class="companyLogo">
-				<img ng-src="{{companyLogoImage}}" style="width:90px;height:90px;margin-left:5px;margin-top:5px">
-			</div>
-  	  </div>
+        <!--
+        <div style="position:absolute; top:0;left:0;z-index:-1">
+            <div class="companyLogo">
+                <img ng-src="{{companyLogoImage}}" style="width:90px;height:90px;margin-left:5px;margin-top:5px">
+            </div>
+        </div>
 
-  	  <div style="position:absolute; top:30px;left:0;right:0;z-index:0">			
-	  	  	<div style="text-align:center">
-	  	  		<h1 style="color:white">{{roomName}}</h1>			
-	  	  	</div>
-  	  </div>
+        <div style="position:absolute; top:30px;left:0;right:0;z-index:0">
+            <div style="text-align:center">
+                <h1 style="color:white">{{roomName}}</h1>
+            </div>
+        </div>
 
-  	  <div style="position:absolute;top:200px;left:0;z-index:1;width:100%;color:white;text-align:center">
-	  	  <h3 style="color:#222">CURRENT APPOINTMENTS<span ng-show="asOf"> as of {{ getTimeString(asOf) }}</span></h3>
+        <div style="position:absolute;top:200px;left:0;z-index:1;width:100%;color:white;text-align:center">
+            <h3 style="color:#222">CURRENT APPOINTMENTS<span ng-show="asOf"> as of {{ getTimeString(asOf) }}</span></h3>
 
-	  	  <div style="margin-top:30px">
-		  	  <div ng-hide="appointmentsLoaded">loading</div>
-		  	  <div ng-show="appointmentsLoaded" ng-repeat="appointment in appointments">	  	  	
-		  	  	<h3 style="color:white">
+            <div style="margin-top:30px">
+                <div ng-hide="appointmentsLoaded">loading</div>
+                <div ng-show="appointmentsLoaded" ng-repeat="appointment in appointments">
+                    <h3 style="color:white">
 			  	  	<span ng-show="appointment.isCurrentAppointment">&rarr;</span>
 			  	  	<b>{{appointment.subject}}</b> - {{appointment.startTime}} - {{appointment.endTime}}
 			  	  	<span ng-show="appointment.isCurrentAppointment">&larr;</span>
 		  	  	</h3>
-		  	  </div>
-		  	  <div ng-show="appointmentsLoaded && appointments.length == 0">
-		  	  	<h3 style="color:white">NONE FOR TODAY</h3>
-		  	  </div>
-	  	  </div>
-  	  </div> 
-  	  
-  	  <div style="position:absolute; top:0;right:0;z-index:2">
-			<button class="button button-icon button-clear ion-navicon" style="font-size:32px"
-					menu-toggle="right">
-        	</button>
-  	  </div>
-  </ion-content>
+                </div>
+                <div ng-show="appointmentsLoaded && appointments.length == 0">
+                    <h3 style="color:white">NONE FOR TODAY</h3>
+                </div>
+            </div>
+        </div>
 
-  <div style="position:absolute; bottom:50px;left:0;right:0;z-index:3" ng-show="allowBookRoom()">			
-	  	  	<div style="text-align:center;">
-	  	  		<button class="button" ng-click="bookRoomButton()" style="height:60px"><span style="font-size:32px">Use This Room Now</span></button>	  	  		
-	  	  	</div>
-  	  </div>
+        <div style="position:absolute; top:0;right:0;z-index:2">
+            <button class="button button-icon button-clear ion-navicon" style="font-size:32px" menu-toggle="right">
+            </button>
+        </div>
+-->
+        
+        <!-- NEW VERSION -->
+
+        <div style="position:absolute;top:0;left:0;width:100%;height:100%;min-height:100%;z-index:10;background-color:green">
+            <!--LEFT SIDE -->
+            <div style="float:left;background-color:#ccc;width:60%;height:100%;min-height:100%;position:relative">
+                <!--BACKGROUND IMAGE-->
+                <div style="position:absolute; top:0;left:0;z-index:11;width:100%;height:100%">
+                    <img ng-src="{{companyLogoImage}}" style="width:100%;height:100%">
+                </div>
+
+                <!--ROOM NAME-->
+                <div style="position:absolute; top:25px;left:30px;z-index:12">
+                    <div>
+                        <h3 style="color:white">{{roomName}}</h3>
+                    </div>
+                </div>
+
+                <!--AVAILABILITY PANEL-->
+                <div ng-show="appointmentsLoaded" style="position:absolute;top:80px;left:0;width:100%;height:160px;z-index:13;text-align:center;font-size:90px;color:white;padding-top:67px"
+                     ng-style="getRoomColorStyle()">
+                    <b>{{availableText}}</b>
+                </div>
+
+                <!--CURRENT MEETING-->
+                <div ng-show="appointmentsLoaded && !roomAvailable" 
+                     style="position:absolute;top:270px;left:0;width:50%;z-index:14;margin-left:40px;color:white">
+                    <div style="text-align:center">
+                        <h5 style="margin:0;color:white">CURRENTLY</h5>
+                    </div>
+                    <hr style="color:white;border:0;border-top:1px solid white" />
+                    <div style="padding-left:20px">
+                                                
+                        <!--CURRENT MEETING-->
+                        <div ng-repeat="appointment in appointments">
+                            <div ng-if="appointment.isCurrentAppointment">
+                                <h3 style="color:white">{{appointment.subject}}</h3>
+                                <h5 style="color:white"><strong>{{appointment.organizer}}</strong>
+                                    <br/> 
+                                    {{appointment.startTime}} - {{appointment.endTime}}
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--NEXT MEETING-->
+                <div ng-show="appointmentsLoaded && roomAvailable && nextAppointment" 
+                     style="position:absolute;top:270px;left:0;width:50%;z-index:14;margin-left:40px;color:white">
+                    <div style="text-align:center">
+                        <h5 style="margin:0;color:white">NEXT APPOINTMENT</h5>
+                    </div>
+                    <hr style="color:white;border:0;border-top:1px solid white" />
+                    <div style="padding-left:20px">                                                
+                        <div>
+                            <h3 style="color:white">{{nextAppointment.subject}}</h3>
+                            <h5 style="color:white"><strong>{{nextAppointment.organizer}}</strong>
+                                <br/> 
+                                {{nextAppointment.startTime}} - {{nextAppointment.endTime}}
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!--RIGHT SIDE-->
+            <div style="float:right;background-color;width:40%;height:100%;background-color:#0079c2;color:white">
+                <!--DATE/TIME-->
+                <div style="text-align:center">
+                    <!--CURRENT TIME-->
+                    <div style="font-size:55px;padding-top:55px">
+                        {{ getTimeString(asOf) }}
+                    </div>
+
+                    <!--DATE-->
+                    <div style="padding-top:25px">
+                        {{ getDateString(asOf) }}
+                    </div>
+                </div>
+
+                <!--TODAYS APPOINTMENTS-->
+                <div style="width:100%;padding-top:25px;margin-top:20px">
+                    <!--HEADER-->
+                    <div style="text-align:center">
+                        <h5 style="margin:0;color:white">TODAY'S APPOINTMENTS</h5>
+                    </div>
+                    <hr style="color:white;border:0;border-top:1px solid white" />
+                </div>
+                <div style="width:100%">
+                    <!--ACTUAL APPOINTMENTS-->
+                    <div>
+                        <div ng-hide="appointmentsLoaded" style="text-align:center">loading</div>
+                        <div ng-show="appointmentsLoaded" ng-repeat="appointment in appointments">
+                            <!--FOREACH APPOINTMENT: -->
+                            <div ng-class="{'highlightCurrentAppointment':appointment.isCurrentAppointment}" style="padding:5px">
+                                <div style="padding-left:25px;padding-right:25px">
+                                    <div style="width:50%;display:inline-block;">
+                                        {{appointment.organizer}}
+                                    </div>
+                                    <div style="width:50%;float:right;text-align:right">
+                                        {{appointment.startTime}} - {{appointment.endTime}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="appointmentsLoaded && appointments.length == 0" style="text-align:center">
+                            <h3 style="color:white">NONE FOR TODAY</h3>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--BOOK MEETING NOW BUTTON -->
+                <div style="position:absolute; bottom:60px;right:0;z-index:20;width:40%;text-align:center;" ng-show="allowBookRoom()">
+                    <div style="display:inline-block;width:280px">
+                        <button class="button" ng-click="bookRoomButton()" 
+                                style="height:50px;background-color:transparent;border-radius:20px;border:1px solid white;padding:0 30px 0 30px;color:white">
+                            <span style="">BOOK MEETING NOW</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ADMIN MENU BUTTON-->
+        <div style="position:absolute; top:0;right:0;z-index:12">
+            <button class="button button-icon button-clear ion-navicon" style="font-size:32px" menu-toggle="right">
+            </button>
+        </div>
+
+
+    </ion-content>
+
+    <div style="position:absolute; bottom:50px;left:0;right:0;z-index:3" ng-show="allowBookRoom()">
+        <div style="text-align:center;">
+            <button class="button" ng-click="bookRoomButton()" style="height:60px"><span style="font-size:32px">Use This Room Now</span></button>
+        </div>
+    </div>
 </ion-view>
