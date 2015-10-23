@@ -59,7 +59,11 @@ namespace ConfRoomServer.Logic.Exchange
                 CalendarView cView = new CalendarView(startDate, endDate, NUM_APPTS);
 
                 // Limit the properties returned to the appointment's subject, start time, and end time.
-                cView.PropertySet = new PropertySet(AppointmentSchema.Subject, AppointmentSchema.Start, AppointmentSchema.End);
+                cView.PropertySet = new PropertySet(
+                    AppointmentSchema.Subject, 
+                    AppointmentSchema.Start, 
+                    AppointmentSchema.End,
+                    AppointmentSchema.Organizer);
 
                 // Retrieve a collection of appointments by using the calendar view.
                 FindItemsResults<Appointment> appointments = calendar.FindAppointments(cView);
@@ -76,7 +80,8 @@ namespace ConfRoomServer.Logic.Exchange
                     {
                         Start = a.Start,
                         End = a.End,
-                        Subject = a.Subject
+                        Subject = a.Subject,
+                        Organizer = a.Organizer.Name
                     });
                 }
 

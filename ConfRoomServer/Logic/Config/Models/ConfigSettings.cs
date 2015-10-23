@@ -18,5 +18,7 @@ namespace ConfRoomServer.Logic.Config.Models
         public string CompanyLogoImage { get; set; }
 
         public int PollingIntervalSeconds { get; set; }
+        public string AvailableRoomText { get; set; }
+        public string BusyRoomText { get; set; }
     }
 }

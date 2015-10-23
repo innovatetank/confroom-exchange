@@ -20,22 +20,69 @@ namespace ConfRoomServer.Logic.Config
             public Models.ConfigSettings ConfigSettings { get; set; }
         }
 
+        private string getSettingFromAppSettingsOverriddenByEnvironment(
+            string appSettingsName, string environmentVariableName, string defaultValue)
+        {
+            var resultValue = ConfigurationManager.AppSettings[appSettingsName].ToString();
+            if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(environmentVariableName)))
+            {
+                resultValue = Environment.GetEnvironmentVariable(environmentVariableName);
+            }
+
+            if (string.IsNullOrWhiteSpace(resultValue)) resultValue = defaultValue;
+
+            return resultValue;
+        }
+
         private string getCompanyLogoUrl()
         {
-            var companyLogoUrl = ConfigurationManager.AppSettings["companyLogoUrl"].ToString();
-            if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("CONFROOMSERVER_LOGOURL")))
-            {
-                companyLogoUrl = Environment.GetEnvironmentVariable("CONFROOMSERVER_LOGOURL");
-            }
-            return companyLogoUrl;
+            return getSettingFromAppSettingsOverriddenByEnvironment(
+                appSettingsName: "companyLogoUrl",
+                environmentVariableName: "CONFROOMSERVER_LOGOURL",
+                defaultValue: "");
         }
 
         private int getPollingIntervalSeconds()
         {
-            return Convert.ToInt32(ConfigurationManager.AppSettings["pollingIntervalSeconds"].ToString());
+            var setting = getSettingFromAppSettingsOverriddenByEnvironment(
+                appSettingsName: "pollingIntervalSeconds",
+                environmentVariableName: "CONFROOMSERVER_POLLINGINTERVAL",
+                defaultValue: "60");
+
+            return Convert.ToInt32(setting);
         }
 
+        private string getAvailableColor()
+        {
+            return getSettingFromAppSettingsOverriddenByEnvironment(
+                appSettingsName: "availableColor",
+                environmentVariableName: "CONFROOMSERVER_AVAILABLECOLOR",
+                defaultValue: "#8DC63F");
+        }
 
+        private string getBusyColor()
+        {
+            return getSettingFromAppSettingsOverriddenByEnvironment(
+                appSettingsName: "busyColor",
+                environmentVariableName: "CONFROOMSERVER_BUSYCOLOR",
+                defaultValue: "#C20000");
+        }
+
+        private string getAvailableRoomText()
+        {
+            return getSettingFromAppSettingsOverriddenByEnvironment(
+                appSettingsName: "availableRoomText",
+                environmentVariableName: "CONFROOMSERVER_AVAILABLEROOMTEXT",
+                defaultValue: "AVAILABLE");
+        }
+
+        private string getBusyRoomText()
+        {
+            return getSettingFromAppSettingsOverriddenByEnvironment(
+                appSettingsName: "busyRoomText",
+                environmentVariableName: "CONFROOMSERVER_BUSYROOMTEXT",
+                defaultValue: "IN USE");
+        }
 
         public GetConfigResponse Execute(GetConfigRequest request)
         {
@@ -46,10 +93,12 @@ namespace ConfRoomServer.Logic.Config
 
             var configSettings = new Models.ConfigSettings
             {
-                AvailableColor = "green",
-                BusyColor = "red",
+                AvailableColor = getAvailableColor(),
+                BusyColor = getBusyColor(),
                 CompanyLogoImage = companyLogoImage,
-                PollingIntervalSeconds = pollingIntervalSeconds
+                PollingIntervalSeconds = pollingIntervalSeconds,
+                AvailableRoomText = getAvailableRoomText(),
+                BusyRoomText = getBusyRoomText()
             };
             response.ConfigSettings = configSettings;
             response.Success = true;
@@ -66,7 +115,7 @@ namespace ConfRoomServer.Logic.Config
                 client.UseDefaultCredentials = true;
 
                 var byteArray = client.DownloadData(companyLogoUrl);
-                return "data:image/png;base64," + Convert.ToBase64String(byteArray);
+                return "data:image/jpeg;base64," + Convert.ToBase64String(byteArray);
             }
         }
 
