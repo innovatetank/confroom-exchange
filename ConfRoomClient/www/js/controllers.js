@@ -165,7 +165,7 @@ angular.module('confRoomClientApp.controllers', [])
     };
 
     $scope.bookRoomButton = function () {
-        $scope.bookMinutes = 15;
+        $scope.bookMinutes = 15; 
         $scope.bookRoomModal.show();
     };
     $scope.closeBookRoom = function () {

@@ -49,25 +49,25 @@
                 </div>
 
                 <!--ROOM NAME-->
-                <div style="position:absolute; top:25px;left:30px;z-index:12">
+                <div style="position:absolute; top:60px;left:40px;z-index:12">
                     <div>
-                        <h3 style="color:white">{{roomName}}</h3>
+                        <h2 style="color:white">{{roomName}}</h2>
                     </div>
                 </div>
 
                 <!--AVAILABILITY PANEL-->
-                <div ng-show="appointmentsLoaded" style="position:absolute;top:80px;left:0;width:100%;height:160px;z-index:13;text-align:center;font-size:90px;color:white;padding-top:67px"
+                <div ng-show="appointmentsLoaded" style="position:absolute;top:155px;left:0;width:100%;height:160px;z-index:13;text-align:center;font-size:90px;color:white;padding-top:67px"
                      ng-style="getRoomColorStyle()">
                     <b>{{availableText}}</b>
                 </div>
 
                 <!--CURRENT MEETING-->
                 <div ng-show="appointmentsLoaded && !roomAvailable" 
-                     style="position:absolute;top:270px;left:0;width:50%;z-index:14;margin-left:40px;color:white">
+                     style="position:absolute;top:350px;left:0;width:50%;z-index:14;margin-left:40px;color:white">
                     <div style="text-align:center">
                         <h5 style="margin:0;color:white">CURRENTLY</h5>
                     </div>
-                    <hr style="color:white;border:0;border-top:1px solid white" />
+                    <hr style="color:white;border:0;border-top:1px solid white;padding-bottom:10px" />
                     <div style="padding-left:20px">
                                                 
                         <!--CURRENT MEETING-->
@@ -85,7 +85,7 @@
 
                 <!--NEXT MEETING-->
                 <div ng-show="appointmentsLoaded && roomAvailable && nextAppointment" 
-                     style="position:absolute;top:270px;left:0;width:50%;z-index:14;margin-left:40px;color:white">
+                     style="position:absolute;top:350px;left:0;width:50%;z-index:14;margin-left:40px;color:white">
                     <div style="text-align:center">
                         <h5 style="margin:0;color:white">NEXT APPOINTMENT</h5>
                     </div>
@@ -123,7 +123,7 @@
                     <div style="text-align:center">
                         <h5 style="margin:0;color:white">TODAY'S APPOINTMENTS</h5>
                     </div>
-                    <hr style="color:white;border:0;border-top:1px solid white" />
+                    <hr style="color:white;border:0;border-top:1px solid white;padding-bottom:10px;margin-left:35px;margin-right:35px" />
                 </div>
                 <div style="width:100%">
                     <!--ACTUAL APPOINTMENTS-->
@@ -132,7 +132,7 @@
                         <div ng-show="appointmentsLoaded" ng-repeat="appointment in appointments">
                             <!--FOREACH APPOINTMENT: -->
                             <div ng-class="{'highlightCurrentAppointment':appointment.isCurrentAppointment}" style="padding:5px">
-                                <div style="padding-left:25px;padding-right:25px">
+                                <div style="padding-left:50px;padding-right:50px">
                                     <div style="width:50%;display:inline-block;">
                                         {{appointment.organizer}}
                                     </div>
@@ -170,9 +170,11 @@
 
     </ion-content>
 
+    <!--
     <div style="position:absolute; bottom:50px;left:0;right:0;z-index:3" ng-show="allowBookRoom()">
         <div style="text-align:center;">
             <button class="button" ng-click="bookRoomButton()" style="height:60px"><span style="font-size:32px">Use This Room Now</span></button>
         </div>
     </div>
+-->
 </ion-view>
