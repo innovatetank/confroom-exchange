@@ -84,21 +84,27 @@ namespace ConfRoomServer.Logic.Config
                 defaultValue: "IN USE");
         }
 
+        private string getAdminMenuPassword()
+        {
+            return getSettingFromAppSettingsOverriddenByEnvironment(
+                appSettingsName: "adminMenuPassword",
+                environmentVariableName: "CONFROOMSERVER_ADMINMENUPWD",
+                defaultValue: "12345");
+        }
+
         public GetConfigResponse Execute(GetConfigRequest request)
         {
             var response = new GetConfigResponse();
-
-            int pollingIntervalSeconds = getPollingIntervalSeconds();
-            var companyLogoImage = getCompanyLogoImage();
 
             var configSettings = new Models.ConfigSettings
             {
                 AvailableColor = getAvailableColor(),
                 BusyColor = getBusyColor(),
-                CompanyLogoImage = companyLogoImage,
-                PollingIntervalSeconds = pollingIntervalSeconds,
+                CompanyLogoImage = getCompanyLogoImage(),
+                PollingIntervalSeconds = getPollingIntervalSeconds(),
                 AvailableRoomText = getAvailableRoomText(),
-                BusyRoomText = getBusyRoomText()
+                BusyRoomText = getBusyRoomText(),
+                AdminMenuPassword = getAdminMenuPassword()
             };
             response.ConfigSettings = configSettings;
             response.Success = true;
