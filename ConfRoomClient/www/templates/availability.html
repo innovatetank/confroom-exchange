@@ -134,7 +134,7 @@
                             <div ng-class="{'highlightCurrentAppointment':appointment.isCurrentAppointment}" style="padding:5px">
                                 <div style="padding-left:50px;padding-right:50px">
                                     <div style="width:50%;display:inline-block;">
-                                        {{appointment.organizer}}
+                                        {{ appointment.organizer == roomName ? "Impromptu Meeting" : appointment.organizer}}
                                     </div>
                                     <div style="width:50%;float:right;text-align:right">
                                         {{appointment.startTime}} - {{appointment.endTime}}

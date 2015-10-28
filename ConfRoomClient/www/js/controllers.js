@@ -1,10 +1,12 @@
+var adminPassword = "54321";
+
 angular.module('confRoomClientApp.controllers', [])
 
 .controller('AvailabilityCtrl', function ($scope, $log, $ionicModal, $ionicPopup, $ionicLoading, ApiService) {
     $scope.roomName = "[LOADING]";
 
     $scope.appointmentsLoaded = false;
-    
+
     // If the room is currently available, then we show the next appointment booked for the room. 
     $scope.nextAppointment = null;
 
@@ -67,6 +69,7 @@ angular.module('confRoomClientApp.controllers', [])
                 $scope.companyLogoImage = response.configSettings.companyLogoImage;
                 $scope.availableRoomText = response.configSettings.availableRoomText;
                 $scope.busyRoomText = response.configSettings.busyRoomText;
+                adminPassword = response.configSettings.adminMenuPassword;
                 $scope.loadExchangeItems();
                 setInterval(function () {
                     $scope.loadExchangeItems();
@@ -90,23 +93,23 @@ angular.module('confRoomClientApp.controllers', [])
         var now = new Date();
         for (var i = 0; i < $scope.appointments.length; i++) {
             var a = $scope.appointments[i];
-            
+
             // Is this appointment in progress?
             a.isCurrentAppointment = false;
             if (a.startDate <= now && a.endDate > now) {
                 available = false;
                 a.isCurrentAppointment = true;
-            }            
+            }
         }
-        
+
         // Calculate the next appointment time 
         if (available) {
             for (var i = 0; i < $scope.appointments.length; i++) {
                 var a = $scope.appointments[i];
-                
+
                 if (!a.isCurrentAppointment) {
                     if (a.startDate > now && ($scope.nextAppointment == null || a.startDate < $scope.nextAppointment.startDate)) {
-                        $scope.nextAppointment = a;                        
+                        $scope.nextAppointment = a;
                     }
                 }
             }
@@ -114,7 +117,7 @@ angular.module('confRoomClientApp.controllers', [])
             // Room is busy
             $scope.nextAppointment = null;
         }
-        
+
         // Set classes on scope for room availability color
         $scope.roomAvailable = available;
         if (available) {
@@ -165,7 +168,7 @@ angular.module('confRoomClientApp.controllers', [])
     };
 
     $scope.bookRoomButton = function () {
-        $scope.bookMinutes = 15; 
+        $scope.bookMinutes = 15;
         $scope.bookRoomModal.show();
     };
     $scope.closeBookRoom = function () {
@@ -214,7 +217,7 @@ angular.module('confRoomClientApp.controllers', [])
     $scope.loadConfiguration();
 })
 
-.controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout) {
 
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
@@ -239,7 +242,46 @@ angular.module('confRoomClientApp.controllers', [])
     };
 
     $scope.openServerConnectionModal = function () {
-        $scope.serverConnectionModal.show();
+        console.log('OPENING ADMIN MENU');
+
+        $scope.adminPwd = {
+            password: null
+        };
+        
+        $scope.validateAdminPasswordAndOpenConnections = function () {
+            if ($scope.adminPwd.password == adminPassword) {
+                setTimeout(function() {
+                    $scope.serverConnectionModal.show();    
+                }, 1);                
+            } else {
+                setTimeout(function() {
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Incorrect password',
+                        template: 'You have entered the incorrect password. Please try again.'
+                    });                    
+                });
+            }
+        };
+
+        $scope.connectionsModal = $ionicPopup.show({
+            template: '<form ng-submit="connectionsModal.close();validateAdminPasswordAndOpenConnections()"><input type="password" ng-model="adminPwd.password" style="padding-left:7px;padding-right:7px;font-size:32px;height:50px"></form>',
+            title: 'Admin Password',
+            subTitle: 'Please enter the administrator password to access this function:',
+            scope: $scope,
+            buttons: [
+                {
+                    text: 'Cancel'
+                },
+                {
+                    text: '<b>Login</b>',
+                    type: 'button-positive',
+                    onTap: function (e) {
+                        $scope.validateAdminPasswordAndOpenConnections();
+                        return $scope.adminPwd.password;
+                    }
+                }
+            ]
+        });
     };
 
     $scope.saveServerConnectionData = function () {
@@ -256,7 +298,8 @@ angular.module('confRoomClientApp.controllers', [])
 
     // Create the Server Connection modal that we will use later
     $ionicModal.fromTemplateUrl('templates/serverConnectionModal.html', {
-        scope: $scope
+        scope: $scope,
+        backdropClickToClose: false
     }).then(function (modal) {
         $scope.serverConnectionModal = modal;
     });

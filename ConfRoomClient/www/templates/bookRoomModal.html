@@ -2,10 +2,10 @@
     <ion-header-bar class="bar" style="background-color:#ccc">
         <h1 class="title">BOOK ROOM NOW</h1>
         <div class="buttons">
-            <button class="button button-clear" ng-click="closeBookRoom()" style="color:black">Close</button>
+            <button class="button button-clear" ng-click="closeBookRoom()" style="color:black;margin-right:25px">Close</button>
         </div>
     </ion-header-bar>
-    <ion-content style="position:relative">
+    <ion-content style="position:relative" scroll="false">
         <form>
 
             <!-- OLD WAY -->
@@ -44,16 +44,16 @@
 -->
 
             <!-- NEW WAY -->
-            <span style="font-size:170px;position:absolute;top:95px;left:10px;width:300px;background-color:transparent;text-align:center">{{bookMinutes}}</span>
-            <span style="font-size:50px;position:absolute;top:220px;left:10px;width:300px;text-align:center;background-color:transparent">MINUTES</span>
+            <span style="font-size:170px;position:absolute;top:105px;left:10px;width:300px;background-color:transparent;text-align:center;letter-spacing:-5px">{{bookMinutes}}</span>
+            <span style="font-size:50px;position:absolute;top:210px;left:10px;width:300px;text-align:center;background-color:transparent">MINUTES</span>
 
-            <div style="width:80px;height:80px;background-color:#0079c2;color:white;position:absolute;left:340px;top:50px;border-radius:10px;cursor:pointer" ng-click="clickPlus()">
+            <div style="width:100px;height:100px;background-color:#0079c2;color:white;position:absolute;left:320px;top:40px;border-radius:10px;cursor:pointer" ng-click="clickPlus()">
                 <div style="display:inline-block;position:absolute;left:50%;top:50%;margin-left:-21px;margin-top:-20px">
                     <span style="font-size:72px">+</span>
                 </div>
             </div>
 
-            <div style="width:80px;height:80px;background-color:#0079c2;color:white;position:absolute;left:340px;top:150px;border-radius:10px;cursor:pointer" ng-click="clickMinus()">
+            <div style="width:100px;height:100px;background-color:#0079c2;color:white;position:absolute;left:320px;top:160px;border-radius:10px;cursor:pointer" ng-click="clickMinus()">
                 <div style="display:inline-block;position:absolute;left:50%;top:50%;margin-left:-14px;margin-top:-16px">
                     <span style="font-size:72px">-</span>
                 </div>
@@ -61,7 +61,7 @@
 
             <button class="button button-block" style="width:130px;position:absolute;top:140px;right:35px;border-radius:20px;background-color:#8dc63f;border:0;color:white" type="button" ng-click="bookItButton()">BOOK IT</button>
 
-            <button class="button button-block" style="width:130px;position:absolute;top:210px;right:35px;border-radius:20px;background-color:#c20000;border:0;color:white" type="button" ng-click="cancelButton()">CANCEL</button>
+            <button class="button button-block" style="width:130px;position:absolute;top:202px;right:35px;border-radius:20px;background-color:#c20000;border:0;color:white" type="button" ng-click="closeBookRoom()">CANCEL</button>
 
             </div>
         </form>
