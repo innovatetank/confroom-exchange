@@ -72,7 +72,7 @@ namespace ConfRoomServer.Logic.Exchange
                 foreach (var a in appointments)
                 {
                     //find appointments will only give basic properties.
-                    //in order to get more properties (such as BODY), we need to call call EWS again
+                    //in order to get more properties (such as BODY), we need to call EWS again
                     //Appointment appointmentDetailed = Appointment.Bind(service, a.Id, new PropertySet(BasePropertySet.FirstClassProperties) { RequestedBodyType = BodyType.Text });
 
 
