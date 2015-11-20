@@ -23,10 +23,17 @@ namespace ConfRoomServer
 
         protected override void OnStart(string[] args)
         {
-            var uri = ConfigurationManager.AppSettings["listenerUri"].ToString();
+            try
+            {
+                var uri = ConfigurationManager.AppSettings["listenerUri"].ToString();
 
-            host = new NancyHost(new CustomBootstrapper(), new Uri(uri));
-            host.Start();
+                host = new NancyHost(new CustomBootstrapper(), new Uri(uri));
+                host.Start();
+            }
+            catch (Exception e)
+            {
+                OnStop();
+            }
         }
 
         protected override void OnStop()
