@@ -40,7 +40,7 @@ angular.module('confRoomClientApp.controllers', [])
             if (h > 11) {
                 ampm = "pm";
                 h -= 12;
-                if (h == 0) h = 12;
+                if (h === 0) h = 12;
             }
             if (m < 10) {
                 m = '0' + m;
@@ -54,7 +54,7 @@ angular.module('confRoomClientApp.controllers', [])
                 "July", "August", "September", "October", "November", "December"];
 
             var m = dt.getMonth();
-            var d = dt.getDay();
+            var d = dt.getDate();
             var y = dt.getFullYear();
 
             return monthNames[m] + " " + d + ", " + y;

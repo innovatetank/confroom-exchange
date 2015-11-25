@@ -8,7 +8,7 @@ angular.module('confRoomClientApp.services', [])
         service.getBaseApiUrl = function () {
             var host = window.localStorage['confroom_host'];
             var port = window.localStorage['confroom_port'];
-            return "http://" + host + ":" + port + "/";
+            return "https://" + host + ":" + port + "/";
         };
 
         service.post = function (route, request, callback) {
